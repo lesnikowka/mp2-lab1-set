@@ -38,19 +38,24 @@ TBitField::~TBitField()
 
 int TBitField::GetMemIndex(const int n) const // индекс Мем для бита n
 {
+    if (n < 0 || n >= BitLen) {
+        throw std::exception("index out of the bounds");
+
+        return 0;
+    }
+    
     return n / (sizeof(TELEM) * 8);
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
 {
-    if (n < 0) {
-        throw std::exception("Index can not be less than 0");
-    }
-    else {
-        return pMem[GetMemIndex(n)];
+    if (n < 0 || n >= BitLen) {
+        throw std::exception("index out of the bounds");
+
+        return TELEM();
     }
 
-    return TELEM();
+    return pMem[GetMemIndex(n)];
 }
 
 // доступ к битам битового поля
@@ -62,35 +67,51 @@ int TBitField::GetLength(void) const // получить длину (к-во б�
 
 void TBitField::SetBit(const int n) // установить бит
 {
-    int memIndex = GetMemIndex(n);
-    TELEM mask = 1;
+    if (n < 0 || n >= BitLen) {
+        throw std::exception("index out of the bounds");
+    }
+    else {
+        int memIndex = GetMemIndex(n);
+        TELEM mask = 1;
 
-    mask << (n - memIndex);
-    
-    pMem[memIndex] = pMem[memIndex] | mask;
+        mask << (n - memIndex * sizeof(TELEM));
+
+        pMem[memIndex] = pMem[memIndex] | mask;
+    }
 }
 
 void TBitField::ClrBit(const int n) // очистить бит
 {
-    int memIndex = GetMemIndex(n);
-    TELEM mask = 1;
+    if (n < 0 || n >= BitLen) {
+        throw std::exception("index out of the bounds");
+    }
+    else {
+        int memIndex = GetMemIndex(n);
+        TELEM mask = 1;
 
-    mask << (n - memIndex);
+        mask << (n - memIndex * sizeof(TELEM));
 
-    pMem[memIndex] = pMem[memIndex] & (~mask);
+        pMem[memIndex] = pMem[memIndex] & (~mask);
+    }
 }
 
 int TBitField::GetBit(const int n) const // получить значение бита
 {
-  int memIndex = GetMemIndex(n);
-  TELEM mask = 1;
+    if (n < 0 || n >= BitLen) {
+        throw std::exception("index out of the bounds");
 
-  mask << (n - memIndex);
+        return 0;
+    }
 
-  if (~mask == (~mask | pMem[memIndex]))
-      return 0;
-  else
-      return 1;
+    int memIndex = GetMemIndex(n);
+    TELEM mask = 1;
+    
+    mask << (n - memIndex * sizeof(TELEM));
+    
+    if (~mask == (~mask | pMem[memIndex]))
+        return 0;
+    else
+        return 1;
 }
 
 // битовые операции
