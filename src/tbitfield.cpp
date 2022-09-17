@@ -47,7 +47,7 @@ int TBitField::GetMemIndex(const int n) const // индекс Мем для би
         return 0;
     }
     
-    return n / (sizeof(TELEM) * 8);
+    return (BitLen - n) / (sizeof(TELEM) * 8);
 }
 
 TELEM TBitField::GetMemMask(const int n) const // битовая маска для бита n
@@ -58,7 +58,7 @@ TELEM TBitField::GetMemMask(const int n) const // битовая маска дл
         return TELEM();
     }
 
-    return (1 << (n - GetMemIndex(n) * sizeof(TELEM)));
+    return (1 << ((BitLen - n) - GetMemIndex(n) * sizeof(TELEM)));
 }
 
 // доступ к битам битового поля
@@ -74,9 +74,7 @@ void TBitField::SetBit(const int n) // установить бит
         throw std::exception("index out of the bounds");
     }
     else {
-        int memIndex = GetMemIndex(n);
-
-        pMem[memIndex] = pMem[memIndex] | GetMemMask(n);
+        pMem[GetMemIndex(n)] = pMem[GetMemIndex(n)] | GetMemMask(n);
     }
 }
 
