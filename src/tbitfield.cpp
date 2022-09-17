@@ -9,8 +9,8 @@
 
 TBitField::TBitField(int len)
 {
-    if (len < 1) { 
-        throw std::exception("Size can not be less than 1");
+    if (len < 0) { 
+        throw std::exception("Size can not be less than 0");
     }
     else {
         BitLen = len;
@@ -140,28 +140,32 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-    if (BitLen != bf.BitLen) {
-        throw std::exception("Sizes are not equal");
+    int resultBitLen = std::max(BitLen, bf.BitLen);
+    int beforeLastEl = std::min(MemLen, bf.MemLen) - 1;
+    int a, b;
 
-        return TBitField(0);
+    TBitField result(0);
+
+    if (MemLen > bf.MemLen) result = *this;
+    else result = bf;
+    
+
+    for (int i = 0; i < beforeLastEl; i++)
+        result.pMem[resultBitLen - i - 1] = pMem[BitLen - i - 1] | bf.pMem[bf.BitLen - i - 1];
+
+    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++) {
+        a = GetBit(i); b = bf.GetBit(i);
+        if (GetBit(i) || bf.GetBit(i))
+            result.SetBit(i);
     }
-
-    TBitField result(BitLen);
-
-    for (int i = 0; i < MemLen; i++)
-        result.pMem[i] = pMem[i] | bf.pMem[i];
+    std::cout << result << std::endl;
+    
 
     return result;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-    if (BitLen != bf.BitLen) {
-        throw std::exception("Sizes are not equal");
-
-        return TBitField(0);
-    }
-
     TBitField result(BitLen);
 
     for (int i = 0; i < MemLen; i++)
