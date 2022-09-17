@@ -142,34 +142,35 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
     int resultBitLen = std::max(BitLen, bf.BitLen);
     int beforeLastEl = std::min(MemLen, bf.MemLen) - 1;
-    int a, b;
 
     TBitField result(0);
 
     if (MemLen > bf.MemLen) result = *this;
     else result = bf;
-    
 
     for (int i = 0; i < beforeLastEl; i++)
         result.pMem[resultBitLen - i - 1] = pMem[BitLen - i - 1] | bf.pMem[bf.BitLen - i - 1];
 
-    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++) {
-        a = GetBit(i); b = bf.GetBit(i);
+    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++) 
         if (GetBit(i) || bf.GetBit(i))
             result.SetBit(i);
-    }
-    std::cout << result << std::endl;
-    
 
     return result;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-    TBitField result(BitLen);
+    int resultBitLen = std::max(BitLen, bf.BitLen);
+    int beforeLastEl = std::min(MemLen, bf.MemLen) - 1;
 
-    for (int i = 0; i < MemLen; i++)
-        result.pMem[i] = pMem[i] & bf.pMem[i];
+    TBitField result(resultBitLen);
+
+    for (int i = 0; i < beforeLastEl; i++)
+        result.pMem[resultBitLen - i - 1] = pMem[BitLen - i - 1] & bf.pMem[bf.BitLen - i - 1];
+
+    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++)
+        if (GetBit(i) & bf.GetBit(i))
+            result.SetBit(i);
 
     return result;
 }
@@ -178,14 +179,9 @@ TBitField TBitField::operator~(void) // отрицание
 {
     TBitField result(BitLen);
 
-    TELEM res;
-
-    for (int i = 0; i < MemLen; i++) {
-        res = pMem[i];
-        res = (~pMem[i]);
-        result.pMem[i] = res;
-    }
-
+    for (int i = 0; i < MemLen; i++) 
+        result.pMem[i] = (~pMem[i]);
+    
     return result;
 }
 
