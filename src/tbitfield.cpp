@@ -189,7 +189,7 @@ TBitField TBitField::operator~(void) // отрицание
 
 istream &operator>>(istream &istr, TBitField &bf) // ввод
 {
-    TELEM bit;
+    int bit;
 
     for (int i = 0; i < bf.BitLen; i++) {
         istr >> bit;
