@@ -58,7 +58,7 @@ TELEM TBitField::GetMemMask(const int n) const // битовая маска дл
         return TELEM();
     }
 
-    return (1 << ((BitLen - n) - GetMemIndex(n) * sizeof(TELEM)));
+    return (1 << ((BitLen - n) - GetMemIndex(n) * sizeof(TELEM) * 8));
 }
 
 // доступ к битам битового поля
@@ -148,10 +148,11 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
     if (BitLen > bf.BitLen) result = *this;
     else result = bf;
 
-    for (int i = 0; i < beforeLastEl; i++)
-        result.pMem[resultBitLen - i - 1] = pMem[BitLen - i - 1] | bf.pMem[bf.BitLen - i - 1];
+    for (int i = 0; i < beforeLastEl; i++) {
+        result.pMem[result.MemLen - i - 1] = pMem[MemLen - i - 1] | bf.pMem[bf.MemLen - i - 1];
+    }
 
-    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++) 
+    for (int i = beforeLastEl * sizeof(TELEM) * 8; i < std::min(BitLen, bf.BitLen); i++) 
         if (GetBit(i) || bf.GetBit(i))
             result.SetBit(i);
 
@@ -166,9 +167,9 @@ TBitField TBitField::operator&(const TBitField &bf) // операция "и"
     TBitField result(resultBitLen);
 
     for (int i = 0; i < beforeLastEl; i++)
-        result.pMem[resultBitLen - i - 1] = pMem[BitLen - i - 1] & bf.pMem[bf.BitLen - i - 1];
+        result.pMem[result.MemLen - i - 1] = pMem[MemLen - i - 1] & bf.pMem[bf.MemLen - i - 1];
 
-    for (int i = beforeLastEl * sizeof(TELEM); i < std::min(BitLen, bf.BitLen); i++)
+    for (int i = beforeLastEl * sizeof(TELEM) * 8; i < std::min(BitLen, bf.BitLen); i++)
         if (GetBit(i) & bf.GetBit(i))
             result.SetBit(i);
 
