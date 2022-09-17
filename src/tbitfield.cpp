@@ -154,17 +154,44 @@ int TBitField::operator!=(const TBitField &bf) const // сравнение
 
 TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 {
-    return TBitField(0);
+    if (BitLen != bf.BitLen) {
+        throw std::exception("Sizes are not equal");
+
+        return TBitField(0);
+    }
+
+    TBitField result(BitLen);
+
+    for (int i = 0; i < MemLen; i++)
+        result.pMem[i] = pMem[i] | bf.pMem[i];
+
+    return result;
 }
 
 TBitField TBitField::operator&(const TBitField &bf) // операция "и"
 {
-    return TBitField(0);
+    if (BitLen != bf.BitLen) {
+        throw std::exception("Sizes are not equal");
+
+        return TBitField(0);
+    }
+
+    TBitField result(BitLen);
+
+    for (int i = 0; i < MemLen; i++)
+        result.pMem[i] = pMem[i] & bf.pMem[i];
+
+    return result;
 }
 
 TBitField TBitField::operator~(void) // отрицание
 {
-    return TBitField(0);
+    TBitField result(BitLen);
+
+    for (int i = 0; i < MemLen; i++)
+        result.pMem[i] = ~pMem[i];
+
+    return result;
 }
 
 // ввод/вывод
