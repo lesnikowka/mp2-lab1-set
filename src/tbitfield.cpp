@@ -145,7 +145,7 @@ TBitField TBitField::operator|(const TBitField &bf) // операция "или"
 
     TBitField result(0);
 
-    if (MemLen > bf.MemLen) result = *this;
+    if (BitLen > bf.BitLen) result = *this;
     else result = bf;
 
     for (int i = 0; i < beforeLastEl; i++)
