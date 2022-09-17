@@ -77,7 +77,7 @@ void TBitField::SetBit(const int n) // установить бит
         int memIndex = GetMemIndex(n);
         TELEM mask = 1;
 
-        mask << (n - memIndex * sizeof(TELEM));
+        mask = mask << (n - memIndex * sizeof(TELEM));
 
         pMem[memIndex] = pMem[memIndex] | mask;
     }
@@ -92,7 +92,7 @@ void TBitField::ClrBit(const int n) // очистить бит
         int memIndex = GetMemIndex(n);
         TELEM mask = 1;
 
-        mask << (n - memIndex * sizeof(TELEM));
+        mask = mask << (n - memIndex * sizeof(TELEM));
 
         pMem[memIndex] = pMem[memIndex] & (~mask);
     }
@@ -109,12 +109,17 @@ int TBitField::GetBit(const int n) const // получить значение б
     int memIndex = GetMemIndex(n);
     TELEM mask = 1;
     
-    mask << (n - memIndex * sizeof(TELEM));
+    mask = mask << (n - memIndex * sizeof(TELEM));
+
     
-    if (~mask == (~mask | pMem[memIndex]))
+
+
+
+    if ((~mask) == ((~mask) | pMem[memIndex]))
         return 0;
     else
         return 1;
+
 }
 
 // битовые операции
