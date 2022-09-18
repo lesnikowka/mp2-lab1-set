@@ -14,7 +14,7 @@ TBitField::TBitField(int len)
     }
     else {
         BitLen = len;
-        MemLen = len / (sizeof(TELEM) * 8) + 1;
+        MemLen = len % (sizeof(TELEM) * 8) ? len / (sizeof(TELEM) * 8) + 1 : len / (sizeof(TELEM) * 8);
 
         pMem = new TELEM[MemLen];
 
@@ -124,8 +124,16 @@ TBitField& TBitField::operator=(const TBitField &bf) // присваивание
 int TBitField::operator==(const TBitField &bf) const // сравнение
 {
     if (BitLen == bf.BitLen) {
-        for (int i = 0; i < BitLen; i++)
+        //for (int i = 0; i < MemLen - 1; i++) {
+        //    if (pMem[MemLen - i - 1] != bf.pMem[MemLen - i - 1]) return 0;
+        //}
+        //for (int i = (MemLen - 1) * sizeof(TELEM) * 8; i < BitLen; i++) {
+        //    if (GetBit(i) != bf.GetBit(i)) return 0;
+        //}
+
+        for (int i = 0; i < BitLen; i++) {
             if (GetBit(i) != bf.GetBit(i)) return 0;
+        }
 
         return 1;
     }
