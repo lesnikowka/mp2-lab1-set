@@ -60,53 +60,83 @@ TSet& TSet::operator=(const TSet &s) // присваивание
 
 int TSet::operator==(const TSet &s) const // сравнение
 {
-    for (int i = 0; i < std::max(MaxPower, s.MaxPower); i++) {
-        if (BitField.GetBit(i) != s.BitField.GetBit(i)) {
-            return 0;
-        }
+    if (MaxPower == s.MaxPower) {
+        for (int i = 0; i < MaxPower; i++)
+            if (BitField.GetBit(i) != s.BitField.GetBit(i))
+                return 0;
     }
+    else return 0;
 
     return 1;
 }
 
 int TSet::operator!=(const TSet &s) const // сравнение
 {
-    return 0;
+    return !operator==(s);
 }
 
 TSet TSet::operator+(const TSet &s) // объединение
 {
-    return TSet(0);
+    TSet result(std::max(MaxPower, s.MaxPower));
+    result = BitField | s.BitField;
+
+    return result;
 }
 
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
-    return TSet(0);
+    if (Elem < 0 || Elem >= MaxPower) {
+        throw std::exception("Element not in universe");
+        return 0;
+    }
+
+    TSet result(*this);
+    if (Elem < MaxPower) result.InsElem(Elem);
+
+    return result;
 }
 
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
-    return TSet(0);
+    if (Elem < 0 || Elem >= MaxPower) {
+        throw std::exception("Element not in universe");
+        return 0;
+    }
+
+    TSet result(*this);
+    if (Elem < MaxPower) result.DelElem(Elem);
+
+    return result;
 }
 
 TSet TSet::operator*(const TSet &s) // пересечение
 {
-    return TSet(0);
+    TSet result(std::max(MaxPower, s.MaxPower));
+    result = BitField & s.BitField;
+
+    return result;
 }
 
 TSet TSet::operator~(void) // дополнение
 {
-    return TSet(0);
+    TSet result(MaxPower);
+    result.BitField = (~BitField);
+
+    return result;
 }
 
 // перегрузка ввода/вывода
 
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
+
     return istr;
 }
 
 ostream& operator<<(ostream &ostr, const TSet &s) // вывод
 {
+    for (int i = 0; i < s.MaxPower; i++) 
+        if (s.BitField.GetBit(i)) ostr << i;
+
     return ostr;
 }
