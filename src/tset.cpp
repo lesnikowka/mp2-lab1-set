@@ -26,13 +26,18 @@ TSet::operator TBitField()
     return BitField;
 }
 
-int TSet::GetMaxPower(void) const // получить макс. к-во эл-тов
+int TSet::GetMaxPower(void) const noexcept// получить макс. к-во эл-тов
 {
     return MaxPower;
 }
 
 int TSet::IsMember(const int Elem) const // элемент множества?
 {
+    if (Elem < 0 || Elem >= MaxPower) {
+        throw std::out_of_range("Element not in universe");
+        return 0;
+    }
+
     if (BitField.GetBit(Elem)) return 1;
 
     return 0;
@@ -40,11 +45,17 @@ int TSet::IsMember(const int Elem) const // элемент множества?
 
 void TSet::InsElem(const int Elem) // включение элемента множества
 {
+    if (Elem < 0 || Elem >= MaxPower) 
+        throw std::out_of_range("Element not in universe");
+
     BitField.SetBit(Elem);
 }
 
 void TSet::DelElem(const int Elem) // исключение элемента множества
 {
+    if (Elem < 0 || Elem >= MaxPower) 
+        throw std::out_of_range("Element not in universe");
+
     BitField.ClrBit(Elem);
 }
 
@@ -80,8 +91,8 @@ TSet TSet::operator+(const TSet &s) // объединение
 TSet TSet::operator+(const int Elem) // объединение с элементом
 {
     if (Elem < 0 || Elem >= MaxPower) {
-        throw std::exception("Element not in universe");
-        return 0;
+        throw std::out_of_range("Element not in universe");
+        return TSet(0);
     }
 
     TSet result(*this);
@@ -93,8 +104,8 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
 TSet TSet::operator-(const int Elem) // разность с элементом
 {
     if (Elem < 0 || Elem >= MaxPower) {
-        throw std::exception("Element not in universe");
-        return 0;
+        throw std::out_of_range("Element not in universe");
+        return TSet(0);
     }
 
     TSet result(*this);
