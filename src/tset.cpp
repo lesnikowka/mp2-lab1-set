@@ -123,7 +123,15 @@ TSet TSet::operator~(void) // дополнение
 
 istream &operator>>(istream &istr, TSet &s) // ввод
 {
+    int elem;
+    std::string str;
+    getline(istr, str);
 
+    std::istringstream iss(str);
+
+    while (iss >> elem)
+        s.InsElem(elem);
+    
     return istr;
 }
 
