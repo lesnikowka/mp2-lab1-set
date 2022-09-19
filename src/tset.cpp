@@ -85,7 +85,7 @@ TSet TSet::operator+(const int Elem) // объединение с элемент
     }
 
     TSet result(*this);
-    if (Elem < MaxPower) result.InsElem(Elem);
+    result.InsElem(Elem);
 
     return result;
 }
@@ -98,7 +98,7 @@ TSet TSet::operator-(const int Elem) // разность с элементом
     }
 
     TSet result(*this);
-    if (Elem < MaxPower) result.DelElem(Elem);
+    result.DelElem(Elem);
 
     return result;
 }
