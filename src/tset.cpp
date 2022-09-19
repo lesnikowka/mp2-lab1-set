@@ -60,14 +60,8 @@ TSet& TSet::operator=(const TSet &s) // присваивание
 
 int TSet::operator==(const TSet &s) const // сравнение
 {
-    if (MaxPower == s.MaxPower) {
-        for (int i = 0; i < MaxPower; i++)
-            if (BitField.GetBit(i) != s.BitField.GetBit(i))
-                return 0;
-    }
-    else return 0;
-
-    return 1;
+    if ((MaxPower == s.MaxPower) && (BitField == s.BitField)) return 1;
+    return 0;
 }
 
 int TSet::operator!=(const TSet &s) const // сравнение
