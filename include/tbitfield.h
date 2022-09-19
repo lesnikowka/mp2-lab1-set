@@ -23,15 +23,15 @@ private:
   int  MemLen; // к-во эл-тов Мем для представления бит.поля
 
   // методы реализации
-  int   GetMemIndex(const int n) const; // индекс в pМем для бита n       (#О2)
-  TELEM GetMemMask (const int n) const; // битовая маска для бита n       (#О3)
+  int   GetMemIndex(const int n) const noexcept; // индекс в pМем для бита n       (#О2)
+  TELEM GetMemMask (const int n) const noexcept; // битовая маска для бита n       (#О3)
 public:
   TBitField(int len);                //                                   (#О1)
   TBitField(const TBitField &bf);    //                                   (#П1)
   ~TBitField();                      //                                    (#С)
 
   // доступ к битам
-  int GetLength(void) const;      // получить длину (к-во битов)           (#О)
+  int GetLength(void) const noexcept;      // получить длину (к-во битов)           (#О)
   void SetBit(const int n);       // установить бит                       (#О4)
   void ClrBit(const int n);       // очистить бит                         (#П2)
   int  GetBit(const int n) const; // получить значение бита               (#Л1)
