@@ -91,20 +91,19 @@ int TBitField::GetBit(const int n) const // получить значение б
 
 // битовые операции
 
-TBitField& TBitField::operator=(const TBitField &bf) // присваивание
+TBitField& TBitField::operator=(const TBitField& bf) // присваивание
 {
     if (this == &bf) return *this;
 
-    if (MemLen != bf.MemLen) {
-        delete[] pMem;
+    if (MemLen != bf.MemLen){
+        delete pMem;
         pMem = new TELEM[bf.MemLen];
+        MemLen = bf.MemLen;
     }
-    
-    BitLen = bf.BitLen;
-    MemLen = bf.MemLen;
 
-    for (int i = 0; i < MemLen; i++)
-        pMem[i] = bf.pMem[i];
+    BitLen = bf.BitLen;
+
+    memcpy(pMem, bf.pMem, MemLen * sizeof(TELEM));
 
     return *this;
 }
