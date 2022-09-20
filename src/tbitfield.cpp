@@ -30,8 +30,7 @@ TBitField::TBitField(const TBitField &bf) // конструктор копиро
 
     pMem = new TELEM[MemLen];
 
-    for (int i = 0; i < MemLen; i++)
-        pMem[i] = bf.pMem[i];
+    memcpy(pMem, bf.pMem, MemLen * sizeof(TELEM));
 }
 
 TBitField::~TBitField()
