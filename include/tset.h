@@ -8,6 +8,8 @@
 #ifndef __SET_H__
 #define __SET_H__
 
+#include <sstream>
+
 #include "tbitfield.h"
 
 class TSet
@@ -21,7 +23,7 @@ public:
   TSet(const TBitField &bf); // конструктор преобразования типа
   operator TBitField();      // преобразование типа к битовому полю
   // доступ к битам
-  int GetMaxPower(void) const;     // максимальная мощность множества
+  int GetMaxPower(void) const noexcept;     // максимальная мощность множества
   void InsElem(const int Elem);       // включить элемент в множество
   void DelElem(const int Elem);       // удалить элемент из множества
   int IsMember(const int Elem) const; // проверить наличие элемента в множестве
